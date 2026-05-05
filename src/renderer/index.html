@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; media-src * blob: data:; style-src 'self' 'unsafe-inline'; connect-src *;"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antares</title>
+    <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <h1>🌍 Antares Radio World & IPTV 📺</h1>
+           
+            <p class="subtitle">Radios Públicas del Mundo.</p>
+           
+            <button id="toggle-favs" class="toggle-favs">★ Solo favoritos</button>     
+           
+            <div class="search-box">
+                <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Buscar por nombre o país..."
+                />
+            </div>
+            
+            <div id="radio-list" class="radio-list"></div>
+        </aside>
+
+        <main class="player-panel">
+            <section class="now-playing-card">
+                <h2>Reproducción Actual</h2>
+
+                <div class="player-content">
+                    <div class="player-info">
+                        <p id="app-name"></p>
+                        <p><strong>Radio:</strong> <span id="current-radio">Ninguna seleccionada</span></p>
+                        <p><strong>País:</strong> <span id="current-country">-</span></p>
+                        <p><strong>Tipo:</strong><span id="current-type">Radio</span></p>
+
+                        <div class="controls">
+                            <button id="play-btn">▶ Reproducir</button>
+                            <button id="pause-btn">⏸ Pausar</button>
+                            <button id="stop-btn">⏹ Stop</button>
+                        </div>
+
+                        <p id="status">Estado: detenido</p>
+                    </div>
+
+                    <div class="player-visual">
+                        <img 
+                        id="radio-visual"
+                        class="radio-visual"
+                        src="../../assets/gifs/radio-idle.gif" 
+                        alt="Visual de reproducción"
+                        />
+                        
+                        <video 
+                            id="iptv-video"
+                            class="iptv-video hidden"
+                            controls preload="metadata"
+                        ></video>
+                        
+                    </div>
+                </div>
+            </section>
+
+            <section class="iptv-card">
+                <button id="open-playlist-btn" class="iptv-open-btn">
+                    <span class="iptv-icon">📺</span>
+                    <span class="iptv-text">
+                        <strong>Abrir lista IPTV</strong>
+                        <small>Cargar archivo .m3u o m3u8</small>
+                    </span>
+                </button>
+
+                <div class="iptv-status-box">
+                    <p><strong>Estado:</strong> <span id="iptv-status">Sin lista cargada</span></p>
+                    <p><strong>Canales:</strong> <span id="iptv-count">0</span></p>
+                    <p><strong>Archivo:</strong> <span id="iptv-file-name">Ninguno</span></p>
+                </div>
+            </section>
+
+        </main>
+
+        <aside class="iptv-sidebar">
+            <div class="iptv-sidebar-header">
+                <h2>📺 Canales IPTV</h2>
+                <button id="toggle-iptv-favs" class="toggle-iptv-favs">
+                   ★ Solo Favoritos IPTV
+                </button>
+                <p class="iptv-sidebar-subtitle">Lista cargada desde archivo</p>
+            </div>
+
+            <div id="iptv-channel-list" class="iptv-channel-list">
+                <p class="iptv-empty-message">Carga una lista IPTV para ver canales aquí.</p>
+            </div>
+        </aside>
+    </div>
+
+
+    <script type="module" src="./renderer.js"></script>
+    <script type="module" src="../vendor/hls.light.min.js"></script>
+</body>
+</html>

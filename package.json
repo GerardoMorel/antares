@@ -1,0 +1,17 @@
+{
+  "name": "antares",
+  "version": "1.0.0",
+  "description": "App de escritorio para radios públicas e IPTV del usuario",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Gerardo Morel",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^41.2.1"
+  },
+  "dependencies": {
+    "hls.js": "^1.6.16"
+  }
+}
