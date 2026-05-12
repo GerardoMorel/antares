@@ -59,3 +59,16 @@ ipcMain.handle('open-m3u-file', async () => {
         content,
     };
 });
+
+ipcMain.handle('read-m3u-file', async (_event, filePath) => {
+    if (!filePath || !fs.existsSync(filePath)) {
+        return null;
+    }
+
+    const content = fs.readFileSync(filePath, 'utf-8');
+
+    return {
+        filePath,
+        content
+    };
+});

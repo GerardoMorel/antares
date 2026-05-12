@@ -1,4 +1,8 @@
 node_modules/
 dist/
-.env
-*.log
+win-unpacked/
+
+*.blockmap
+builder-debug.yml
+builder-effective-config.yaml
+latest.yml

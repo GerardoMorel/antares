@@ -18,6 +18,25 @@ body {
 
 }
 
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-botton:20px;
+}
+
+.app-logo {
+    width: 280px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
 .sidebar {
     background: #1f2937;
     padding: 24px;
@@ -110,10 +129,46 @@ body {
     font-size: 20px;
 }
 
-.controls {
+.play-panel {
     display: flex;
-    gap: 12px;
-    margin: 20px 0;
+    margin: auto;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+}
+
+.playback-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 8px;
+}
+
+.playback-controls button {
+    align-items: center;
+    width: 32px;
+    height:32px;
+    min-width: 12px;
+    min-height: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 5;
+}
+
+.play-panel:hover {
+    border-color: #00bfff;
+
+}
+
+.playback-controls button:hover {
+    border-color: #00bfff;
+    transform: scale(1.1);
 }
 
 button {
@@ -521,3 +576,104 @@ button:hover {
     border-color: #00bfff;
     font-weight: bold;
 }
+
+
+.app-footer {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-logo {
+
+    width: 120px;
+    opacity: 0.8;
+
+}
+
+
+.footer-links {
+
+    display: flex;
+    gap: 15px;
+}
+
+.footer-links a {
+
+    color: #7fdfff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.2s;
+
+}
+
+
+.footer-links a:hover {
+
+    color: #00f0ff;
+    transform: scale(1.05);
+
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-contact p {
+    margin: 0;
+    font-size: 13px;
+    color: #9ca3af;
+
+}
+
+.footer-links  {
+    display: flex;
+    gap: 18px;
+}
+
+.footer-links a {
+    color: #7fdfff;
+    font-size: 24px;
+    transition: 025s ease;
+
+}
+
+.footer-links a:hover {
+    color: #00f0ff;
+    transform: scale(1.2);
+    text-shadow: 0 0 10px #00f0ff;
+}
+
+
+.footer-links img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    transition: 0.25s ease;
+    opacity: 0.9;
+}
+
+.footer-links img:hover {
+    transform: scale(1.15);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #00f0ff);
+}
+
+
+
+
+
+
+
+
+
+
+

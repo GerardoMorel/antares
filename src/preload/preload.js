@@ -5,8 +5,6 @@ contextBridge.exposeInMainWorld('desktopAPI', {
 });
 
 contextBridge.exposeInMainWorld('iptvAPI', {
-    openFile: () => ipcRenderer.invoke('open-m3u-file')
+    openFile: () => ipcRenderer.invoke('open-m3u-file'),
+    readFile: (filePath) => ipcRenderer.invoke('read-m3u-file', filePath)
 });
-
-
-

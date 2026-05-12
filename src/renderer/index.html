@@ -8,11 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Antares</title>
     <link rel="stylesheet" href="./styles.css"/>
+
 </head>
 <body>
     <div class="app">
         <aside class="sidebar">
-            <h1>🌍 Antares Radio World & IPTV 📺</h1>
+
+            <div class="logo-container">
+                <img src="../../assets/icons/antaresLogo.png" alt="Antares Logo" class ="app-logo">
+                <p class="subtitles">Radios Públicas del Mundo</p>
+            </div>
            
             <p class="subtitle">Radios Públicas del Mundo.</p>
            
@@ -41,10 +46,15 @@
                         <p><strong>País:</strong> <span id="current-country">-</span></p>
                         <p><strong>Tipo:</strong><span id="current-type">Radio</span></p>
 
-                        <div class="controls">
-                            <button id="play-btn">▶ Reproducir</button>
-                            <button id="pause-btn">⏸ Pausar</button>
-                            <button id="stop-btn">⏹ Stop</button>
+
+                        <div class="play-panel">
+                            <div class="playback-controls">
+                                <button id="prevIptv"> ⏮ </button>
+                                <button id="play-btn"> ▶ </button>
+                                <button id="pause-btn"> ⏸ </button>
+                                <button id="stop-btn"> ⏹ </button>
+                                <button id="nextIptv"> ⏭ </button>
+                            </div>
                         </div>
 
                         <p id="status">Estado: detenido</p>
@@ -98,11 +108,32 @@
             <div id="iptv-channel-list" class="iptv-channel-list">
                 <p class="iptv-empty-message">Carga una lista IPTV para ver canales aquí.</p>
             </div>
+
+
+            <footer class="app-footer">
+                <img src="../../assets/icons/geraLogo.png" alt="Gera Developer" class="footer-logo">
+
+                <div class="footer-links">
+                    <a href="https://linkedin.com/in/gerardomorel27" target= "_blank">
+                    <img src="../../assets/icons/social/linkedin.png" alt="LinkeIn">
+                    </a>
+                    </a>
+                    <a href="https://wa.me/5490376154501854" target= "_blank">
+                    <img src="../../assets/icons/social/whatsapp.png" alt="Whatsapp">
+                    </a>
+
+                    <a href="https://github.com/GerardoMorel" target= "_blank">
+                    <img src="../../assets/icons/social/github.png" alt="Github">
+                    </a>
+                </div>
+            </footer>
+
+
         </aside>
     </div>
 
-
+    <script src="../vendor/hls.light.min.js"></script>
     <script type="module" src="./renderer.js"></script>
-    <script type="module" src="../vendor/hls.light.min.js"></script>
+
 </body>
 </html>

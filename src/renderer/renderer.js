@@ -25,13 +25,16 @@ const iptvChannelList = document.getElementById('iptv-channel-list');
 const currentType = document.getElementById('current-type');
 const iptvVideo = document.getElementById('iptv-video');
 const toggleIptvFavsBtn = document.getElementById('toggle-iptv-favs');
-
-
+const prevIptvBtn = document.getElementById('prevIptv');
+const nextIptvBtn = document.getElementById('nextIptv');
+const LAST_IPTV_FILE_KEY = 'antaresLastIptvFilePath';
 
 //=========================== Estados Globales ========================================
 
 let radios = [];
 let iptvChannels = [];
+let currentIptvIndex = -1;
+let currentRadioIndex = -1;
 let selectedRadio = null;
 let audio = new Audio();
 let searchTerm = '';
@@ -46,6 +49,80 @@ let hlsPlayer = null;
 
 
 //============================ Funciones ===========================================
+
+function loadIptvPlayListFromResult(result) {
+    if(!result) return false;
+
+    const { filePath, content } = result;
+    const channels = parseM3U (content);
+
+    iptvChannels = channels;
+    selectedIptvChannel = null;
+    currentIptvIndex = -1;
+    expandedGroups = {};
+
+    renderIptvChannels();
+    renderRadios();
+
+    const fileName = filePath.split (/[\\/]/).pop();
+    updateIptvStatus({
+        status: 'Lista Cargada',
+        count: channels.length,
+        fileName
+    });
+
+    statusText.textContent = `Estado: lista IPTV cargada (${channels.length} canales)`;
+
+    return true;
+}
+
+
+
+function playRadioByIndex(direction) {
+    const visibleRadios = getVisibleRadios();
+
+
+    if(visibleRadios.length === 0) return;
+
+    //const currentRadio = visibleRadios[currentRadioIndex];
+
+    let index = visibleRadios.findIndex(r => r.id === selectedRadio?.id);
+
+
+    if (index === -1) {
+        index = 0;
+    } else {
+        index = (index + direction + visibleRadios.length) % visibleRadios.length;
+    }
+
+    currentRadioIndex = index;
+
+    const radio = visibleRadios[currentRadioIndex];
+
+    selectRadio (radio);
+    playSelectedRadio();
+}
+
+
+function getVisibleRadios(){
+   /* const searchTerm = searchInput.value.toLowerCase();
+
+    return radios.filter(radio => {
+        const matchesSearch =
+            radio.name.toLowerCase().includes(searchTerm) ||
+            radio.country.toLowerCase().includes(searchTerm);
+
+        const matchesFavorite =
+            !showOnlyFavorites || favorites.includes(radio.streamUrl);
+
+            return matchesSearch && matchesFavorite;
+    });*/
+
+   return sortRadios(getFilteredRadios());
+}
+
+
+
 
 function resetIptvVideo() {
     if(hlsPlayer) {
@@ -339,6 +416,45 @@ async function playIptvChannel(channel) {
     
 }
 
+async function loadLastIptvPlaylist() {
+    const savedFilePath = localStorage.getItem(LAST_IPTV_FILE_KEY);
+
+    if (!savedFilePath) return;
+
+    try {
+        updateIptvStatus({
+            status: 'Cargando última lista...',
+            count: 0,
+            fileName: savedFilePath.split(/[\\/]/).pop()
+        });
+
+        const result = await window.iptvAPI.readFile(savedFilePath);
+
+        if (!result) {
+            localStorage.removeItem(LAST_IPTV_FILE_KEY);
+
+            updateIptvStatus({
+                status: 'Lista anterior no encontrada',
+                count: 0,
+                fileName: 'Ninguno'
+            });
+
+            statusText.textContent = 'Estado: la lista anterior fue movida o borrada';
+            return;
+        }
+
+        loadIptvPlayListFromResult(result);
+    } catch (error) {
+        console.error('Error cargando última lista IPTV:', error);
+
+        updateIptvStatus({
+            status: 'Error al cargar última lista',
+            count: 0,
+            fileName: 'Ninguno'
+        });
+    }
+}
+
 
 
 function getFilteredRadios() {
@@ -415,8 +531,13 @@ function selectRadio(radio) {
     selectedRadio = radio;
     selectedIptvChannel = null;
 
+    const visibleRadios = getVisibleRadios();
+
+    currentRadioIndex = visibleRadios.findIndex(r => r.id === radio.id);
+
     stopIptvVideo();
     showRadioVisual();
+
 
     currentRadio.textContent = radio.name;
     currentCountry.textContent = radio.country;
@@ -594,6 +715,8 @@ function selectIptvChannel(channel) {
     selectedIptvChannel = channel;
     selectedRadio = null;
 
+    currentIptvIndex = iptvChannels.findIndex(c => c.streamUrl === channel.streamUrl);
+    
     showIptvVideo();
 
     currentRadio.textContent = channel.name;
@@ -616,6 +739,41 @@ searchInput.addEventListener('input', (event) => {
     renderRadios();
 });
 
+prevIptvBtn.addEventListener('click', () => {
+    const type = currentType.textContent;
+
+    if (type === 'IPTV') {
+        if (iptvChannels.length === 0) return;
+
+        currentIptvIndex = (currentIptvIndex -1 + iptvChannels.length) % iptvChannels.length;
+        const channel = iptvChannels[currentIptvIndex];
+
+        selectIptvChannel(channel);
+        playSelectedRadio();
+    } else {
+        playRadioByIndex(-1);
+    }
+
+});
+
+nextIptvBtn.addEventListener('click', () => {
+    const type = currentType.textContent;
+
+    if (type === 'IPTV') {
+        if (iptvChannels.length === 0) return;
+
+        currentIptvIndex = (currentIptvIndex +1) % iptvChannels.length;
+        const channel = iptvChannels[currentIptvIndex];
+
+        selectIptvChannel(channel);
+        playSelectedRadio();
+
+    } else {
+        playRadioByIndex(+1);
+    }
+
+});
+
 toggleFavsBtn.addEventListener('click', () => {
     showOnlyFavorites = !showOnlyFavorites;
     toggleFavsBtn.classList.toggle('active');
@@ -634,10 +792,15 @@ audio.addEventListener('pause', () => {
     setRadioVisual('idle');
 });
 
-    loadFavorites();
-    init();
-    renderIptvChannels();
-    loadIptvFavorites();
+//========================== Carga =========================
+
+loadFavorites();
+loadIptvFavorites();
+init();
+renderIptvChannels();
+loadLastIptvPlaylist();
+
+//==========================================================
     
 
 toggleIptvFavsBtn.addEventListener('click', () => {
@@ -670,54 +833,14 @@ openPlayListBtn.addEventListener('click', async () => {
         return;
     }
 
-    
-/*const favBtn = item.querySelector('.iptv-favorite-btn');
+    const loaded = loadIptvPlayListFromResult(result);
 
-    favBtn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        toggleIptvFavorite(channel.id);
-    });
-    
+    if (loaded) {
 
-iptvVideo.addEventListener('playing', () => {
-    statusText.textContent = `Estado: reproduciendo ${selectedIptvChannel?.name || 'canal IPTV'}`;
-});
+        localStorage.setItem(LAST_IPTV_FILE_KEY, result.filePath);
+        console.log('Lista IPTV guardada', result.filePath);
+    }
 
-iptvVideo.addEventListener('waiting', () => {
-    statusText.textContent = 'Estado: cargando canal IPTV...';
-});
-
-iptvVideo.addEventListener('pause', () => {
-    statusText.textContent = 'Estado: canal IPTV pausado';
-});
-
-iptvVideo.addEventListener('error', () => {
-    statusText.textContent = 'Estado: error al reproducir video IPTV';
-});*/
-
-    const { filePath, content } = result;
-    const channels = parseM3U(content);
-    
-    iptvChannels = channels;
-    selectedIptvChannel = null;
-    expandedGroups = {};
-
-
-
-    renderIptvChannels();
-    renderRadios();
-
-    const fileName = filePath.split('/').pop();
-
-    updateIptvStatus({
-        status: 'Lista cargada',
-        count: channels.length,
-        fileName
-    });
-
-    statusText.textContent = `Estado: lista IPTV cargada(${channels.length} canales)`;
-
-    console.log('Canales parseados: ', channels);
     } catch (error) {
         console.error('Error al abrir o parsear la lista IPTV:', error);
         
