@@ -30,10 +30,10 @@ Simple, lightweight and modern.
 
 ## Main Interface
 
-![Antares Screenshot](assets/screenshots/Captura de pantalla.png)
-![Antares Screenshot](assets/screenshots/Captura de pantalla1.png)
-![Antares Screenshot](assets/screenshots/Captura de pantalla2.png)
-![Antares Screenshot](assets/screenshots/Captura de pantalla3.png)
+![Antares Screenshot](assets/screenshots/1.png)
+![Antares Screenshot](assets/screenshots/2.png)
+![Antares Screenshot](assets/screenshots/3.png)
+![Antares Screenshot](assets/screenshots/4.png)
 
 ---
 
