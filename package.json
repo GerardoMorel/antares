@@ -4,7 +4,7 @@
   "description": "App de escritorio para radios públicas e IPTV del usuario",
   "main": "src/main/main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron --disable-gpu .",
     "dist:win": "electron-builder --win nsis"
   },
   "author": "Gerardo Morel",
@@ -16,31 +16,26 @@
   "dependencies": {
     "hls.js": "^1.6.16"
   },
-
   "build": {
-  "appId": "com.gerardomorel.antares",
-  "productName": "Antares",
-
-  "directories": {
-    "buildResources": "assets/icons"
-  },
-
-  "files": [
-    "src/**/*",
-    "assets/**/*",
-    "package.json"
-  ],
-
-  "win": {
-    "target": "nsis",
-    "icon": "assets/icons/Antares_icono.png"
-  },
-
-  "nsis": {
-    "oneClick": false,
-    "allowToChangeInstallationDirectory": true,
-    "createDesktopShortcut": true,
-    "createStartMenuShortcut": true
+    "appId": "com.gerardomorel.antares",
+    "productName": "Antares",
+    "directories": {
+      "buildResources": "assets/icons"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icons/Antares_icono.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
-}
 }

@@ -18,11 +18,9 @@
                 <img src="../../assets/icons/antaresLogo.png" alt="Antares Logo" class ="app-logo">
                 <p class="subtitles">Radios Públicas del Mundo</p>
             </div>
-           
-            <p class="subtitle">Radios Públicas del Mundo.</p>
-           
-            <button id="toggle-favs" class="toggle-favs">★ Solo favoritos</button>     
-           
+
+            <button id="toggle-favs" class="toggle-favs">★ Solo favoritos</button>
+
             <div class="search-box">
                 <input
                 type="text"
@@ -31,7 +29,7 @@
                 placeholder="Buscar por nombre o país..."
                 />
             </div>
-            
+
             <div id="radio-list" class="radio-list"></div>
         </aside>
 
@@ -61,21 +59,36 @@
                     </div>
 
                     <div class="player-visual">
-                        <img 
+                        <img
                         id="radio-visual"
                         class="radio-visual"
-                        src="../../assets/gifs/radio-idle.gif" 
+                        src="../../assets/gifs/radio-idle.gif"
                         alt="Visual de reproducción"
                         />
-                        
-                        <video 
-                            id="iptv-video"
-                            class="iptv-video hidden"
-                            controls preload="metadata"
-                        ></video>
-                        
+
+
+                        <div class="video-wrapper">
+                            <video
+                                id="iptv-video"
+                                class="iptv-video hidden"
+                                preload="metadata"></video>
+
+                            <div class="floating-controls" id="floating-controls">
+                                <button id="fc-prev">⏮</button>
+                                <button id="fc-play">▶</button>
+                                <button id="fc-pause">⏸</button>
+                                <button id="fc-stop">⏹</button>
+                                <button id="fc-next">⏭</button>
+                                <button id="fc-fullscreen">⛶</button>
+                            </div>
+
+                            <div class="video-error hidden" id="video-error">
+                                <p>⚠️ No se pudo cargar el canal</p>
+                                <span id="video-error-name"></span>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
             </section>
 
             <section class="iptv-card">
