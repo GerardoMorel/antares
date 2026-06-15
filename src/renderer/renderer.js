@@ -28,6 +28,13 @@ const prevIptvBtn = document.getElementById("prevIptv");
 const nextIptvBtn = document.getElementById("nextIptv");
 const LAST_IPTV_FILE_KEY = "antaresLastIptvFilePath";
 
+// Controles de Modo (Con esto cambio de modo radio a modo tv)
+const appContainer = document.getElementById("app-container");
+const btnSelectRadio = document.getElementById("btn-select-radio");
+const btnSelectIptv = document.getElementById("btn-select-iptv");
+const homeBtnRadio = document.getElementById("home-btn-radio");
+const homeBtnIptv = document.getElementById("home-btn-iptv");
+
 //=========================== Estados Globales ========================================
 
 let radios = [];
@@ -764,6 +771,33 @@ renderIptvChannels();
 loadLastIptvPlaylist();
 
 //==========================================================
+
+//========================== Control de Modos (UI) =========================
+
+function setAppMode(mode) {
+  // Primero, le quitamos cualquier clase de modo que tenga actualmente
+  appContainer.classList.remove("mode-welcome", "mode-radio", "mode-iptv");
+  // Luego, le agregamos el modo que queremos activar
+  appContainer.classList.add(mode);
+}
+
+// Eventos para entrar a los modos desde la pantalla de bienvenida
+btnSelectRadio.addEventListener("click", () => {
+  setAppMode("mode-radio");
+});
+
+btnSelectIptv.addEventListener("click", () => {
+  setAppMode("mode-iptv");
+});
+
+// Eventos para regresar a la pantalla de bienvenida (Home)
+homeBtnRadio.addEventListener("click", () => {
+  setAppMode("mode-welcome");
+});
+
+homeBtnIptv.addEventListener("click", () => {
+  setAppMode("mode-welcome");
+});
 
 toggleIptvFavsBtn.addEventListener("click", () => {
   showOnlyIptvFavorites = !showOnlyIptvFavorites;

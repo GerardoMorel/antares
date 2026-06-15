@@ -10,6 +10,173 @@ body {
     overflow: hidden;
 }
 
+/* ==========================================================================
+   NUEVOS ESTILOS PARA EL SISTEMA DE MODOS (CONTEXTUAL)
+   ========================================================================== */
+
+/* Estilos de la nueva Pantalla de Bienvenida */
+.welcome-screen {
+    display: none; /* Se oculta por defecto, se activa según la clase del contenedor app */
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #111827;
+    gap: 20px;
+    text-align: center;
+    padding: 20px;
+}
+
+.welcome-logo {
+    width: 380px;
+    max-width: 90%;
+    object-fit: contain;
+}
+
+.welcome-penguin {
+    width: 180px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.welcome-text {
+    color: #9ca3af;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.welcome-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-mode-select {
+    background: #1f2937;
+    border: 2px solid #374151;
+    color: #f9fafb;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 18px 32px;
+    border-radius: 14px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-mode-select:hover {
+    border-color: #3b82f6;
+    background: #2563eb;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Botón flotante para regresar al Home desde las barras laterales */
+.btn-home {
+    width: 100%;
+    background: #111827;
+    color: #9ca3af;
+    border: 1px solid #374151;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    transition: all 0.2s ease;
+}
+
+.btn-home:hover {
+    background: #374151;
+    color: #fff;
+    border-color: #60a5fa;
+}
+
+/* ==========================================================================
+   CONMUTADOR DE INTERFAZ (CONTROL DE VISIBILIDAD POR CLASES)
+   ========================================================================== */
+
+/* --- MODO 1: BIENVENIDA (Por defecto al iniciar) --- */
+.app.mode-welcome {
+    grid-template-columns: 1fr; /* Una sola columna para la bienvenida */
+}
+.app.mode-welcome .welcome-screen {
+    display: flex;
+}
+.app.mode-welcome .sidebar,
+.app.mode-welcome .player-panel,
+.app.mode-welcome .iptv-sidebar,
+.app.mode-welcome .radio-list {
+    display: none !important;
+}
+
+/* --- MODO 2: SÓLO RADIO --- */
+.app.mode-radio {
+    grid-template-columns: 380px 1fr; /* Desaparece la tercera columna */
+    grid-template-rows: auto 1fr;
+}
+
+.app.mode-radio .sidebar {
+    display: flex;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    height: max-content;
+    border-right: none;
+    margin-bottom: 15px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 4px 8px 20px rgba (0, 0, 0, 0.25);
+    z-index: 10;
+}
+
+.app.mode-radio .player-panel {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    height: max-content;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.app.mode-radio .radio-list {
+    display: grid !important;
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    border-top: 1px solid #374151;
+    padding: 24px;
+    margin-top: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    align-content: start;
+    overflow-y: auto;
+}
+
+.app.mode-radio .welcome-screen,
+.app.mode-radio .iptv-sidebar,
+.app.mode-radio .iptv-card {
+    display: none !important; /* Escondemos todo lo que huela a IPTV */
+}
+
+/* --- MODO 3: SÓLO IPTV --- */
+.app.mode-iptv {
+    grid-template-columns: 1fr 320px; /* Desaparece la barra de radio */
+}
+.app.mode-iptv .player-panel,
+.app.mode-iptv .iptv-sidebar {
+    display: flex;
+}
+/* Reconfiguramos la barra lateral de IPTV a flex para mantener el scroll ordenado */
+.app.mode-iptv .iptv-sidebar {
+    display: flex !important;
+    flex-direction: column;
+}
+.app.mode-iptv .welcome-screen,
+.app.mode-iptv .sidebar,
+.app.mode-iptv .radio-visual,
+.app.mode-iptv .radio-list {
+    display: none !important; /* Escondemos todo lo que huela a Radio */
+}
+
 .app {
     display: grid;
     grid-template-columns: 380px 1fr 320px;
@@ -22,7 +189,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .app-logo {
@@ -38,13 +205,15 @@ body {
 
 .sidebar {
     background: #1f2937;
-    padding: 24px;
+    padding: 16px 24px;
     border-right: 1px solid #374151;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 8px;
     min-height: 0;
     overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .sidebar h1 {
@@ -63,55 +232,54 @@ body {
     min-height: 0;
     overflow-y: auto;
     padding-right: 6px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
     align-content: start;
 }
 
 .radio-item {
     background: #374151;
     border: 1px solid transparent;
-    border-radius: 8px;
-    padding: 8px 12px;
+    border-radius: 12px;
+    padding: 14px 10px;
     cursor: pointer;
     transition: 0.2s ease;
-    min-height: unset;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 8px;
+    position: relative;
 }
 
 .radio-item:hover {
     border-color: #60a5fa;
     background: #3f4b5c;
+    transform: translateY(-2px);
 }
 
 .radio-item.active {
     border-color: #22c55e;
     background: #334155;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
 }
 
 .radio-name {
     font-weight: bold;
-    font-size: 13px;
-    line-height: 1.2;
-    white-space: nowrap;
+    font-size: 14px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    margin-bottom: 0;
+    white-space: normal;
 }
 
 .radio-meta {
-    margin-top: 0;
+    margin-top: 2px;
     color: #9ca3af;
     font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .radio-header {
@@ -121,6 +289,7 @@ body {
 .now-playing-card {
     position: sticky;
     top: 24px;
+    width: 100%;
     max-width: 620px;
     background: #1f2937;
     border: 1px solid #374151;
@@ -190,7 +359,7 @@ button:hover {
 }
 
 .search-box {
-    margin: 18px 0 20px;
+    margin: 5px 0 10px;
 }
 
 .search-input {
@@ -222,9 +391,10 @@ button:hover {
 
 .radio-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
+    width: 100%;
+    gap: 6px;
 }
 
 .favorite-btn {
@@ -236,6 +406,10 @@ button:hover {
     padding: 0;
     line-height: 1;
     flex-shrink: 0;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 18px;
 }
 
 .favorite-btn:hover {
@@ -248,7 +422,7 @@ button:hover {
 
 .toggle-favs {
     width: 100%;
-    margin: 10px 0 14px;
+    margin: 5px 0;
     padding: 12px 14px;
     border: 1px solid #475569;
     border-radius: 12px;
@@ -313,6 +487,53 @@ button:hover {
 
     .radio-visual {
         width: 140px;
+    }
+}
+
+/* ==========================================================================
+   DISEÑO RESPONSIVO EXTRA (PANTALLAS PEQUEÑAS)
+   ========================================================================== */
+@media (max-width: 850px) {
+    /* Hacemos el menú izquierdo ligeramente más angosto */
+    .app.mode-radio {
+        grid-template-columns: 230px 1fr;
+    }
+
+    /* Comprimimos la tarjeta del reproductor */
+    .now-playing-card {
+        padding: 14px;
+    }
+
+    .now-playing-card h2 {
+        font-size: 17px;
+        margin-bottom: 10px;
+    }
+
+    /* Textos de información más pequeños */
+    .player-info p {
+        font-size: 13px;
+        margin: 6px 0;
+    }
+
+    /* Botones de reproducción compactos */
+    .playback-controls button {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: unset;
+        min-height: unset;
+        width: auto;
+        height: auto;
+    }
+
+    /* Achicamos el pingüino */
+    .radio-visual {
+        width: 110px;
+    }
+
+    /* Si la pantalla es MUY pequeña, reducimos la cuadrícula de radios */
+    .app.mode-radio .radio-list {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        padding: 15px;
     }
 }
 
