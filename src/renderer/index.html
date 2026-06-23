@@ -1,113 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta
-    http-equiv="Content-Security-Policy"
-    content="default-src 'self'; media-src * blob: data:; style-src 'self' 'unsafe-inline'; connect-src *;"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Antares</title>
-    <link rel="stylesheet" href="./styles.css"/>
-
-</head>
-<body>
-    <div class="app mode-welcome" id="app-container">
-
-        <div id="welcome.screen" class="welcome-screen">
-            <img src="../../assets/icons/antaresLogo.png" alt="Antares Logo" class ="welcome-logo">
-            <img src="../../assets/gifs/radio-idle.gif" alt="Pingüino" class ="welcome-pinguin">
-            <h2>¡Bienvenido a Antares!</h2>
-            <p class="welcome-text">Selecciona el modo para comenzar a disfrutar del contenido</p>
-            <div class="welcom-buttons">
-                <button id="btn-select-radio" class="btn-mode-select">📻 RADIO</button>
-                <button id="btn-select-iptv" class="btn-mode-select">📺 IPTV</button>
-            </div>
-        </div>
-
-        <aside class="sidebar">
-
-            <button class="btn-home" id="home-btn-radio">🏡 Cambiar de Modo</button>
-
-            <div class="logo-container">
-                <img src="../../assets/icons/antaresLogo.png" alt="Antares Logo" class ="app-logo">
-                <p class="subtitles">Radios Públicas del Mundo</p>
-            </div>
-
-            <button id="toggle-favs" class="toggle-favs">★ Solo favoritos</button>
-
-            <div class="search-box">
-                <input
-                type="text"
-                id="search-input"
-                class="search-input"
-                placeholder="Buscar por nombre o país..."
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; media-src * blob: data:; style-src 'self' 'unsafe-inline'; connect-src *;"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Antares</title>
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+    <body>
+        <div class="app mode-welcome" id="app-container">
+            <div id="welcome-screen" class="welcome-screen">
+                <img
+                    src="../../assets/icons/antaresLogo.png"
+                    alt="Antares Logo"
+                    class="welcome-logo"
                 />
+                <img
+                    src="../../assets/gifs/radio-idle.gif"
+                    alt="Pingüino"
+                    class="welcome-penguin"
+                />
+                <h2>¡Bienvenido a Antares!</h2>
+                <p class="welcome-text">
+                    Selecciona el modo para comenzar a disfrutar del contenido
+                </p>
+                <div class="welcome-buttons">
+                    <button id="btn-select-radio" class="btn-mode-select">
+                        📻 RADIO
+                    </button>
+                    <button id="btn-select-iptv" class="btn-mode-select">
+                        📺 IPTV
+                    </button>
+                </div>
             </div>
 
-        </aside>
+            <aside class="sidebar">
+                <button class="btn-home radio-only" id="home-btn-radio">
+                    🏡 Cambiar de Modo
+                </button>
+                <button class="btn-home iptv-only" id="home-btn-iptv">
+                    🏡 Cambiar de Modo
+                </button>
 
-        <div id="radio-list" class="radio-list"></div>
+                <div class="logo-container">
+                    <img
+                        src="../../assets/icons/antaresLogo.png"
+                        alt="Antares Logo"
+                        class="app-logo"
+                    />
+                    <p class="subtitle radio-only">Radios Públicas del Mundo</p>
+                    <p class="subtitle iptv-only">Televisión IP</p>
+                </div>
 
-        <main class="player-panel">
-            <section class="now-playing-card">
-                <h2>Reproducción Actual</h2>
+                <button id="toggle-favs" class="toggle-favs radio-only">
+                    ★ Solo favoritos
+                </button>
+                <div class="search-box radio-only">
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="search-input"
+                        placeholder="Buscar por nombre o país..."
+                    />
+                </div>
 
-                <div class="player-content">
-                    <div class="player-info">
-                        <p id="app-name"></p>
-                        <p><strong>Radio:</strong> <span id="current-radio">Ninguna seleccionada</span></p>
-                        <p><strong>País:</strong> <span id="current-country">-</span></p>
-                        <p><strong>Tipo:</strong><span id="current-type">Radio</span></p>
+                <button
+                    id="toggle-iptv-favs"
+                    class="toggle-iptv-favs iptv-only"
+                >
+                    ★ Solo Favoritos IPTV
+                </button>
 
-
-                        <div class="play-panel">
-                            <div class="playback-controls">
-                                <button id="prevIptv"> ⏮ </button>
-                                <button id="play-btn"> ▶ </button>
-                                <button id="pause-btn"> ⏸ </button>
-                                <button id="stop-btn"> ⏹ </button>
-                                <button id="nextIptv"> ⏭ </button>
-                            </div>
-                        </div>
-
-                        <p id="status">Estado: detenido</p>
-                    </div>
-
-                    <div class="player-visual">
-                        <img
-                        id="radio-visual"
-                        class="radio-visual"
-                        src="../../assets/gifs/radio-idle.gif"
-                        alt="Visual de reproducción"
-                        />
-
-
-                        <div class="video-wrapper">
-                            <video
-                                id="iptv-video"
-                                class="iptv-video hidden"
-                                preload="metadata"></video>
-
-                            <div class="floating-controls" id="floating-controls">
-                                <button id="fc-prev">⏮</button>
-                                <button id="fc-play">▶</button>
-                                <button id="fc-pause">⏸</button>
-                                <button id="fc-stop">⏹</button>
-                                <button id="fc-next">⏭</button>
-                                <button id="fc-fullscreen">⛶</button>
-                            </div>
-
-                            <div class="video-error hidden" id="video-error">
-                                <p>⚠️ No se pudo cargar el canal</p>
-                                <span id="video-error-name"></span>
-                            </div>
-
-                        </div>
-                    </div>
-            </section>
-
-            <section class="iptv-card">
-                <button id="open-playlist-btn" class="iptv-open-btn">
+                <button
+                    id="open-playlist-btn"
+                    class="iptv-open-btn iptv-only"
+                    style="margin-top: 10px; margin-bottom: 10px"
+                >
                     <span class="iptv-icon">📺</span>
                     <span class="iptv-text">
                         <strong>Abrir lista IPTV</strong>
@@ -115,56 +86,140 @@
                     </span>
                 </button>
 
-                <div class="iptv-status-box">
-                    <p><strong>Estado:</strong> <span id="iptv-status">Sin lista cargada</span></p>
-                    <p><strong>Canales:</strong> <span id="iptv-count">0</span></p>
-                    <p><strong>Archivo:</strong> <span id="iptv-file-name">Ninguno</span></p>
+                <div class="iptv-status-box iptv-only">
+                    <p>
+                        <strong>Estado:</strong>
+                        <span id="iptv-status">Sin lista cargada</span>
+                    </p>
+                    <p>
+                        <strong>Canales:</strong> <span id="iptv-count">0</span>
+                    </p>
+                    <p>
+                        <strong>Archivo:</strong>
+                        <span id="iptv-file-name">Ninguno</span>
+                    </p>
                 </div>
-            </section>
 
-        </main>
+                <footer class="app-footer">
+                    <img
+                        src="../../assets/icons/geraLogo.png"
+                        alt="Gera Developer"
+                        class="footer-logo"
+                    />
+                    <div class="footer-links">
+                        <a
+                            href="https://linkedin.com/in/gerardomorel27"
+                            target="_blank"
+                        >
+                            <img
+                                src="../../assets/icons/social/linkedin.png"
+                                alt="LinkeIn"
+                            />
+                        </a>
+                        <a
+                            href="https://wa.me/5490376154501854"
+                            target="_blank"
+                        >
+                            <img
+                                src="../../assets/icons/social/whatsapp.png"
+                                alt="Whatsapp"
+                            />
+                        </a>
+                        <a
+                            href="https://github.com/GerardoMorel"
+                            target="_blank"
+                        >
+                            <img
+                                src="../../assets/icons/social/github.png"
+                                alt="Github"
+                            />
+                        </a>
+                    </div>
+                </footer>
+            </aside>
 
-        <aside class="iptv-sidebar">
+            <div id="radio-list" class="radio-list"></div>
+            <div id="iptv-channel-list" class="iptv-channel-list"></div>
 
-            <button class="btn-home" id="home-btn-iptv">🏡 Cambiar de Modo</button>
+            <main class="player-panel">
+                <section class="now-playing-card">
+                    <h2>Reproducción Actual</h2>
 
-            <div class="iptv-sidebar-header">
-                <h2>📺 Canales IPTV</h2>
-                <button id="toggle-iptv-favs" class="toggle-iptv-favs">
-                   ★ Solo Favoritos IPTV
-                </button>
-                <p class="iptv-sidebar-subtitle">Lista cargada desde archivo</p>
-            </div>
+                    <div class="player-content">
+                        <div class="player-info">
+                            <p id="app-name"></p>
+                            <p>
+                                <strong>Canal:</strong>
+                                <span id="current-radio"
+                                    >Ninguno seleccionado</span
+                                >
+                            </p>
+                            <p>
+                                <strong>País:</strong>
+                                <span id="current-country">-</span>
+                            </p>
+                            <p>
+                                <strong>Tipo:</strong
+                                ><span id="current-type">-</span>
+                            </p>
 
-            <div id="iptv-channel-list" class="iptv-channel-list">
-                <p class="iptv-empty-message">Carga una lista IPTV para ver canales aquí.</p>
-            </div>
+                            <div class="play-panel">
+                                <div class="playback-controls">
+                                    <button id="prevIptv">⏮</button>
+                                    <button id="play-btn">▶</button>
+                                    <button id="pause-btn">⏸</button>
+                                    <button id="stop-btn">⏹</button>
+                                    <button id="nextIptv">⏭</button>
+                                </div>
+                            </div>
 
+                            <p id="status" style="margin-top: 15px">
+                                Estado: detenido
+                            </p>
+                        </div>
 
-            <footer class="app-footer">
-                <img src="../../assets/icons/geraLogo.png" alt="Gera Developer" class="footer-logo">
+                        <div class="player-visual">
+                            <img
+                                id="radio-visual"
+                                class="radio-visual"
+                                src="../../assets/gifs/radio-idle.gif"
+                                alt="Visual de reproducción"
+                            />
 
-                <div class="footer-links">
-                    <a href="https://linkedin.com/in/gerardomorel27" target= "_blank">
-                    <img src="../../assets/icons/social/linkedin.png" alt="LinkeIn">
-                    </a>
-                    </a>
-                    <a href="https://wa.me/5490376154501854" target= "_blank">
-                    <img src="../../assets/icons/social/whatsapp.png" alt="Whatsapp">
-                    </a>
+                            <div class="video-wrapper">
+                                <video
+                                    id="iptv-video"
+                                    class="iptv-video hidden"
+                                    preload="metadata"
+                                ></video>
 
-                    <a href="https://github.com/GerardoMorel" target= "_blank">
-                    <img src="../../assets/icons/social/github.png" alt="Github">
-                    </a>
-                </div>
-            </footer>
+                                <div
+                                    class="floating-controls"
+                                    id="floating-controls"
+                                >
+                                    <button id="fc-prev">⏮</button>
+                                    <button id="fc-play">▶</button>
+                                    <button id="fc-pause">⏸</button>
+                                    <button id="fc-stop">⏹</button>
+                                    <button id="fc-next">⏭</button>
+                                    <button id="fc-fullscreen">⛶</button>
+                                </div>
 
+                                <div
+                                    class="video-error hidden"
+                                    id="video-error"
+                                >
+                                    <p>⚠️ No se pudo cargar el canal</p>
+                                    <span id="video-error-name"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
 
-        </aside>
-    </div>
-
-    <script src="../vendor/hls.light.min.js"></script>
-    <script type="module" src="./renderer.js"></script>
-
-</body>
+        <script src="../vendor/hls.light.min.js"></script>
+        <script type="module" src="./renderer.js"></script>
+    </body>
 </html>

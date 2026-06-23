@@ -10,13 +10,17 @@ body {
     overflow: hidden;
 }
 
-/* ==========================================================================
-   NUEVOS ESTILOS PARA EL SISTEMA DE MODOS (CONTEXTUAL)
-   ========================================================================== */
+.app {
+    display: grid;
+    height: 100vh;
+    overflow: hidden;
+}
 
-/* Estilos de la nueva Pantalla de Bienvenida */
+/* ==========================================================================
+   PANTALLA DE BIENVENIDA
+   ========================================================================== */
 .welcome-screen {
-    display: none; /* Se oculta por defecto, se activa según la clase del contenedor app */
+    display: none;
     grid-column: 1 / -1;
     flex-direction: column;
     align-items: center;
@@ -62,6 +66,7 @@ body {
     border-radius: 14px;
     transition: all 0.25s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
 .btn-mode-select:hover {
@@ -71,63 +76,30 @@ body {
     box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
 }
 
-/* Botón flotante para regresar al Home desde las barras laterales */
-.btn-home {
-    width: 100%;
-    background: #111827;
-    color: #9ca3af;
-    border: 1px solid #374151;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-    transition: all 0.2s ease;
-}
-
-.btn-home:hover {
-    background: #374151;
-    color: #fff;
-    border-color: #60a5fa;
-}
-
 /* ==========================================================================
-   CONMUTADOR DE INTERFAZ (CONTROL DE VISIBILIDAD POR CLASES)
+   CONMUTADOR DE INTERFAZ UNIFICADO (RADIO & IPTV)
    ========================================================================== */
-
-/* --- MODO 1: BIENVENIDA (Por defecto al iniciar) --- */
-.app.mode-welcome {
-    grid-template-columns: 1fr; /* Una sola columna para la bienvenida */
-}
-.app.mode-welcome .welcome-screen {
-    display: flex;
-}
-.app.mode-welcome .sidebar,
-.app.mode-welcome .player-panel,
-.app.mode-welcome .iptv-sidebar,
-.app.mode-welcome .radio-list {
-    display: none !important;
-}
-
-/* --- MODO 2: SÓLO RADIO --- */
-.app.mode-radio {
-    grid-template-columns: 380px 1fr; /* Desaparece la tercera columna */
+.app.mode-radio,
+.app.mode-iptv {
+    grid-template-columns: 280px 1fr;
     grid-template-rows: auto 1fr;
 }
 
-.app.mode-radio .sidebar {
+.app.mode-radio .sidebar,
+.app.mode-iptv .sidebar {
     display: flex;
     grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    height: max-content;
+    grid-row: 1 / 3;
+    height: auto;
     border-right: none;
     margin-bottom: 15px;
     border-bottom-right-radius: 20px;
-    box-shadow: 4px 8px 20px rgba (0, 0, 0, 0.25);
+    box-shadow: 4px 8px 20px rgba(0, 0, 0, 0.25);
     z-index: 10;
 }
 
-.app.mode-radio .player-panel {
+.app.mode-radio .player-panel,
+.app.mode-iptv .player-panel {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -138,49 +110,67 @@ body {
     padding-bottom: 10px;
 }
 
-.app.mode-radio .radio-list {
-    display: grid !important;
-    grid-column: 1 / -1;
+.app.mode-radio .radio-list,
+.app.mode-iptv .iptv-channel-list {
+    display: block !important;
+    grid-column: 2 / 3;
     grid-row: 2 / 3;
     border-top: 1px solid #374151;
-    padding: 24px;
+    padding: 24px 24px 24px 0;
     margin-top: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-    align-content: start;
     overflow-y: auto;
 }
 
-.app.mode-radio .welcome-screen,
-.app.mode-radio .iptv-sidebar,
-.app.mode-radio .iptv-card {
-    display: none !important; /* Escondemos todo lo que huela a IPTV */
+.app.mode-radio .radio-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    align-content: start;
 }
 
-/* --- MODO 3: SÓLO IPTV --- */
-.app.mode-iptv {
-    grid-template-columns: 1fr 320px; /* Desaparece la barra de radio */
-}
-.app.mode-iptv .player-panel,
-.app.mode-iptv .iptv-sidebar {
-    display: flex;
-}
-/* Reconfiguramos la barra lateral de IPTV a flex para mantener el scroll ordenado */
-.app.mode-iptv .iptv-sidebar {
-    display: flex !important;
-    flex-direction: column;
-}
-.app.mode-iptv .welcome-screen,
-.app.mode-iptv .sidebar,
-.app.mode-iptv .radio-visual,
-.app.mode-iptv .radio-list {
-    display: none !important; /* Escondemos todo lo que huela a Radio */
-}
-
-.app {
+.iptv-group-list {
     display: grid;
-    grid-template-columns: 380px 1fr 320px;
-    height: 100vh;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 12px;
+    margin-bottom: 25px;
+}
+
+/* --- REGLAS DE VISIBILIDAD (AQUÍ ESTABA EL ERROR) --- */
+.app.mode-welcome .welcome-screen {
+    display: flex !important; /* <--- Esta es la línea que hacía falta */
+}
+
+.app.mode-welcome .sidebar,
+.app.mode-welcome .player-panel,
+.app.mode-welcome .radio-list,
+.app.mode-welcome .iptv-channel-list {
+    display: none !important;
+}
+
+.app.mode-radio .iptv-only,
+.app.mode-radio .iptv-channel-list,
+.app.mode-radio .welcome-screen {
+    display: none !important;
+}
+
+.app.mode-iptv .radio-only,
+.app.mode-iptv .radio-list,
+.app.mode-iptv .welcome-screen,
+.app.mode-iptv .radio-visual {
+    display: none !important;
+}
+
+/* ==========================================================================
+   BARRA LATERAL Y COMPONENTES COMUNES
+   ========================================================================== */
+.sidebar {
+    background: #1f2937;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
     overflow: hidden;
 }
 
@@ -201,41 +191,76 @@ body {
 .subtitle {
     font-size: 0.9rem;
     opacity: 0.7;
-}
-
-.sidebar {
-    background: #1f2937;
-    padding: 16px 24px;
-    border-right: 1px solid #374151;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    min-height: 0;
-    overflow: hidden;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.sidebar h1 {
-    margin-top: 0;
-    margin-bottom: 8px;
-}
-
-.subtitle {
     margin-top: 0;
     margin-bottom: 20px;
     color: #9ca3af;
 }
 
-.radio-list {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding-right: 6px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    align-content: start;
+.btn-home {
+    width: 100%;
+    background: #111827;
+    color: #9ca3af;
+    border: 1px solid #374151;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-home:hover {
+    background: #374151;
+    color: #fff;
+    border-color: #60a5fa;
+}
+
+/* ==========================================================================
+   ELEMENTOS DE RADIO
+   ========================================================================== */
+.search-box {
+    margin: 5px 0 10px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #475569;
+    border-radius: 12px;
+    background: #0f172a;
+    color: #f8fafc;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+}
+
+.toggle-favs {
+    width: 100%;
+    margin: 5px 0;
+    padding: 12px 14px;
+    border: 1px solid #475569;
+    border-radius: 12px;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.toggle-favs:hover {
+    border-color: #00bfff;
+}
+
+.toggle-favs.active {
+    background: #00bfff;
+    color: #111827;
+    border-color: #00bfff;
+    font-weight: bold;
 }
 
 .radio-item {
@@ -283,113 +308,6 @@ body {
 }
 
 .radio-header {
-    display: contents;
-}
-
-.now-playing-card {
-    position: sticky;
-    top: 24px;
-    width: 100%;
-    max-width: 620px;
-    background: #1f2937;
-    border: 1px solid #374151;
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-    z-index: 10;
-}
-
-.now-playing-card h2 {
-    margin-top: 0;
-    margin-bottom: 18px;
-    font-size: 20px;
-}
-
-.play-panel {
-    display: flex;
-    margin: auto;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    background: #1f2937;
-    border: 1px solid #374151;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-    z-index: 5;
-}
-
-.playback-controls {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 8px;
-}
-
-.playback-controls button {
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    min-width: 12px;
-    min-height: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-    z-index: 5;
-}
-
-.play-panel:hover {
-    border-color: #00bfff;
-}
-
-.playback-controls button:hover {
-    border-color: #00bfff;
-    transform: scale(1.1);
-}
-
-button {
-    border: none;
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-.search-box {
-    margin: 5px 0 10px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #475569;
-    border-radius: 12px;
-    background: #0f172a;
-    color: #f8fafc;
-    font-size: 14px;
-    outline: none;
-}
-
-.search-input::placeholder {
-    color: #94a3b8;
-}
-
-.search-input:focus {
-    border-color: #22c55e;
-    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
-}
-
-.empty-message {
-    color: #94a3b8;
-    font-size: 14px;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.radio-header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -401,11 +319,9 @@ button:hover {
     background: transparent;
     border: none;
     color: #facc15;
-    font-size: 20px;
     cursor: pointer;
     padding: 0;
     line-height: 1;
-    flex-shrink: 0;
     position: absolute;
     top: 8px;
     right: 8px;
@@ -416,13 +332,12 @@ button:hover {
     transform: scale(1.1);
 }
 
-.favorite-btn:focus {
-    outline: none;
-}
-
-.toggle-favs {
+/* ==========================================================================
+   ELEMENTOS DE IPTV
+   ========================================================================== */
+.toggle-iptv-favs {
     width: 100%;
-    margin: 5px 0;
+    margin-top: 5px;
     padding: 12px 14px;
     border: 1px solid #475569;
     border-radius: 12px;
@@ -430,157 +345,18 @@ button:hover {
     color: #f8fafc;
     font-size: 14px;
     cursor: pointer;
-    transition: 0.2px ease;
+    transition: 0.2s ease;
 }
 
-.toggle-favs:hover {
-    border-color: #00bfff;
+.toggle-iptv-favs:hover {
+    border-color: #22c55e;
 }
 
-.toggle-favs.active {
+.toggle-iptv-favs.active {
     background: #00bfff;
     color: #111827;
     border-color: #00bfff;
     font-weight: bold;
-}
-
-.player-panel {
-    padding: 24px;
-    overflow-y: auto;
-    min-height: 0;
-}
-
-.player-content {
-    display: grid;
-    grid-template-columns: 1fr 220px;
-    gap: 24px;
-    align-items: center;
-}
-
-.player-info {
-    min-width: 0;
-}
-
-.player-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 220px;
-}
-
-.radio-visual {
-    width: 180px;
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-    border-radius: 16px;
-}
-
-@media (max-width: 1000px) {
-    .player-content {
-        grid-template-columns: 1fr;
-    }
-
-    .player-visual {
-        justify-content: flex-start;
-    }
-
-    .radio-visual {
-        width: 140px;
-    }
-}
-
-/* ==========================================================================
-   DISEÑO RESPONSIVO EXTRA (PANTALLAS PEQUEÑAS)
-   ========================================================================== */
-@media (max-width: 850px) {
-    /* Hacemos el menú izquierdo ligeramente más angosto */
-    .app.mode-radio {
-        grid-template-columns: 230px 1fr;
-    }
-
-    /* Comprimimos la tarjeta del reproductor */
-    .now-playing-card {
-        padding: 14px;
-    }
-
-    .now-playing-card h2 {
-        font-size: 17px;
-        margin-bottom: 10px;
-    }
-
-    /* Textos de información más pequeños */
-    .player-info p {
-        font-size: 13px;
-        margin: 6px 0;
-    }
-
-    /* Botones de reproducción compactos */
-    .playback-controls button {
-        padding: 8px 12px;
-        font-size: 12px;
-        min-width: unset;
-        min-height: unset;
-        width: auto;
-        height: auto;
-    }
-
-    /* Achicamos el pingüino */
-    .radio-visual {
-        width: 110px;
-    }
-
-    /* Si la pantalla es MUY pequeña, reducimos la cuadrícula de radios */
-    .app.mode-radio .radio-list {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        padding: 15px;
-    }
-}
-
-.radio-list::-webkit-scrollbar,
-.player-panel::-webkit-scrollbar {
-    width: 10px;
-}
-
-.radio-list::-webkit-scrollbar-track,
-.player-panel::-webkit-scrollbar-track {
-    background: #1e293b;
-    border-radius: 10px;
-}
-
-.radio-list::-webkit-scrollbar-thumb,
-.player-panel::-webkit-scrollbar-thumb {
-    background: #475569;
-    border-radius: 10px;
-}
-
-.radio-list::-webkit-scrollbar-thumb:hover,
-.player-panel::-webkit-scrollbar-thumb:hover {
-    background: #64748b;
-}
-
-.iptv-card {
-    margin-top: 50px;
-    max-width: 620px;
-}
-
-.iptv-status-box {
-    margin-top: 14px;
-    padding: 14px 16px;
-    border: 1px solid #334155;
-    border-radius: 14px;
-    background: #1b2636;
-}
-
-.iptv-status-box p {
-    margin: 6px 0;
-    font-size: 14px;
-    color: #e5e7eb;
-}
-
-.iptv-status-box span {
-    color: #93c5fd;
-    word-break: break-word;
 }
 
 .iptv-open-btn {
@@ -620,86 +396,23 @@ button:hover {
     font-size: 13px;
 }
 
-.iptv-sidebar {
-    background: #1f2937;
-    border-left: 1px solid #374151;
-    padding: 24px 18px;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.iptv-sidebar-header {
-    margin-bottom: 16px;
-    flex-shrink: 0;
-}
-
-.iptv-sidebar-header h2 {
-    margin: 0 0 6px;
-    font-size: 22px;
-}
-
-.iptv-sidebar-subtitle {
-    margin: 0;
-    color: #9ca3af;
-    font-size: 14px;
-}
-
-.iptv-channel-list {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-right: 6px;
-}
-
-.iptv-channel-card {
-    background: #374151;
-    border: 1px solid transparent;
+.iptv-status-box {
+    margin-top: 5px;
+    padding: 14px 16px;
+    border: 1px solid #334155;
     border-radius: 14px;
-    padding: 14px;
-    cursor: pointer;
-    transition: 0.2 ease;
+    background: #1b2636;
 }
 
-.iptv-channel-card:hover {
-    border-color: #60a5fa;
-    background: #334155;
-}
-
-.iptv-channel-card.active {
-    border-color: #22c55e;
-    background-color: #334155;
-}
-
-.iptv-channel-name {
-    font-weight: bold;
-    line-height: 1.25;
-    word-break: break-word;
-    margin-bottom: 8px;
-}
-
-.iptv-channel-meta {
-    color: #cbd5e1;
+.iptv-status-box p {
+    margin: 6px 0;
     font-size: 14px;
-    line-height: 1.3;
+    color: #e5e7eb;
+}
+
+.iptv-status-box span {
+    color: #93c5fd;
     word-break: break-word;
-}
-
-.iptv-empty-message {
-    color: #94a3b8;
-    font-size: 14px;
-    text-align: center;
-    margin-top: 20px;
-}
-
-@media (max-width: 1200px) {
-    .app {
-        grid-template-columns: 320px 1fr 280px;
-    }
 }
 
 .iptv-group-section {
@@ -735,22 +448,23 @@ button:hover {
     flex-shrink: 0;
 }
 
-.iptv-group-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.iptv-channel-card {
+    background: #374151;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
-.iptv-video {
-    width: 100%;
-    max-width: 540px;
-    border-radius: 16px;
-    background: #000;
-    display: block;
+.iptv-channel-card:hover {
+    border-color: #60a5fa;
+    background: #334155;
 }
 
-.hidden {
-    display: none !important;
+.iptv-channel-card.active {
+    border-color: #22c55e;
+    background-color: #334155;
 }
 
 .iptv-channel-header {
@@ -760,49 +474,169 @@ button:hover {
     gap: 8px;
 }
 
+.iptv-channel-name {
+    font-weight: bold;
+    line-height: 1.25;
+    word-break: break-word;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.iptv-channel-meta {
+    color: #cbd5e1;
+    font-size: 12px;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
 .iptv-favorite-btn {
     background: transparent;
     border: none;
     color: #facc15;
-    font-size: 20px;
+    font-size: 18px;
     padding: 0;
     cursor: pointer;
     line-height: 1;
     flex-shrink: 0;
 }
 
-.toggle-iptv-favs {
+/* ==========================================================================
+   PANEL DE REPRODUCCIÓN CENTRAL
+   ========================================================================== */
+.now-playing-card {
+    position: sticky;
+    top: 24px;
     width: 100%;
-    margin-top: 14px;
-    padding: 10xp 12px;
-    border: 1px solid #475569;
+    max-width: 620px;
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+}
+
+.now-playing-card h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 20px;
+}
+
+.player-content {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 24px;
+    align-items: center;
+}
+
+.player-info {
+    min-width: 0;
+}
+
+.play-panel {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background: #1f2937;
+    border: 1px solid #374151;
     border-radius: 12px;
-    background: #1e293b;
-    color: #f8fafc;
-    font-size: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.playback-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 8px;
+}
+
+.playback-controls button {
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    min-width: 12px;
+    min-height: 12px;
+    border-radius: 10px;
+    border: none;
     cursor: pointer;
-    transition: 0.2s ease;
+    padding: 0;
+    font-size: 14px;
 }
 
-.toggle-iptv-favs:hover {
-    border-color: #22c55e;
-}
-
-.toggle-iptv-favs.active {
-    background: #00bfff;
-    color: #111827;
+.playback-controls button:hover {
     border-color: #00bfff;
-    font-weight: bold;
+    transform: scale(1.1);
 }
 
+.player-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+}
+
+.radio-visual {
+    width: 180px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 16px;
+}
+
+.app.mode-iptv .now-playing-card {
+    max-width: 100%;
+    width: 96%;
+}
+
+.app.mode-iptv .player-content {
+    grid-template-columns: 260px 1fr;
+    gap: 30px;
+}
+
+.app.mode-iptv .player-visual {
+    min-height: 400px;
+    width: 100%;
+    background: #0f172a;
+    border-radius: 16px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.app.mode-iptv .video-wrapper {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app.mode-iptv .iptv-video {
+    max-width: 100%;
+    max-height: 500px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
 .app-footer {
-    margin-top: 20px;
+    margin-top: auto;
     padding: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 15px;
 }
 
 .footer-logo {
@@ -813,48 +647,6 @@ button:hover {
 .footer-links {
     display: flex;
     gap: 15px;
-}
-
-.footer-links a {
-    color: #7fdfff;
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: 0.2s;
-}
-
-.footer-links a:hover {
-    color: #00f0ff;
-    transform: scale(1.05);
-}
-
-.footer-contact {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.footer-contact p {
-    margin: 0;
-    font-size: 13px;
-    color: #9ca3af;
-}
-
-.footer-links {
-    display: flex;
-    gap: 18px;
-}
-
-.footer-links a {
-    color: #7fdfff;
-    font-size: 24px;
-    transition: 025s ease;
-}
-
-.footer-links a:hover {
-    color: #00f0ff;
-    transform: scale(1.2);
-    text-shadow: 0 0 10px #00f0ff;
 }
 
 .footer-links img {
@@ -871,8 +663,38 @@ button:hover {
     filter: drop-shadow(0 0 6px #00f0ff);
 }
 
-/*=============controles flotantes=================*/
+/* ==========================================================================
+   SCROLLBARS
+   ========================================================================== */
+.radio-list::-webkit-scrollbar,
+.iptv-channel-list::-webkit-scrollbar,
+.player-panel::-webkit-scrollbar {
+    width: 10px;
+}
 
+.radio-list::-webkit-scrollbar-track,
+.iptv-channel-list::-webkit-scrollbar-track,
+.player-panel::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 10px;
+}
+
+.radio-list::-webkit-scrollbar-thumb,
+.iptv-channel-list::-webkit-scrollbar-thumb,
+.player-panel::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 10px;
+}
+
+.radio-list::-webkit-scrollbar-thumb:hover,
+.iptv-channel-list::-webkit-scrollbar-thumb:hover,
+.player-panel::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* ==========================================================================
+   CONTROLES FLOTANTES FULLSCREEN
+   ========================================================================== */
 .video-wrapper {
     position: relative;
     width: 100%;
@@ -909,6 +731,7 @@ button:hover {
     transition: opacity 0.3s ease;
     z-index: 100;
 }
+
 .floating-controls button {
     background: rgba(255, 255, 255, 0.15);
     color: #fff;
@@ -932,7 +755,7 @@ button:hover {
 
 .video-error {
     position: absolute;
-    inset: 0; /* shorthand de top/right/bottom/left: 0 → cubre todo el wrapper */
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -941,7 +764,7 @@ button:hover {
     background: rgba(0, 0, 0, 0.75);
     border-radius: 16px;
     text-align: center;
-    z-index: 90; /* debajo de los controles (100), encima del video */
+    z-index: 90;
 }
 
 .video-error p {
@@ -953,4 +776,64 @@ button:hover {
 .video-error span {
     color: #94a3b8;
     font-size: 14px;
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD PANTALLAS PEQUEÑAS
+   ========================================================================== */
+@media (max-width: 1000px) {
+    .player-content {
+        grid-template-columns: 1fr;
+    }
+
+    .player-visual {
+        justify-content: flex-start;
+    }
+
+    .radio-visual {
+        width: 140px;
+    }
+}
+
+@media (max-width: 850px) {
+    .app.mode-radio,
+    .app.mode-iptv {
+        grid-template-columns: 230px 1fr;
+    }
+
+    .now-playing-card {
+        padding: 14px;
+    }
+
+    .now-playing-card h2 {
+        font-size: 17px;
+        margin-bottom: 10px;
+    }
+
+    .player-info p {
+        font-size: 13px;
+        margin: 6px 0;
+    }
+
+    .playback-controls button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .radio-visual {
+        width: 110px;
+    }
+
+    .app.mode-radio .radio-list {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        padding: 15px;
+    }
+
+    .iptv-group-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .app.mode-iptv .player-content {
+        grid-template-columns: 1fr;
+    }
 }
